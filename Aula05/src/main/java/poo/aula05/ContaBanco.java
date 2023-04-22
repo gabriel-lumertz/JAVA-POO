@@ -12,70 +12,80 @@ public class ContaBanco {
     private float saldo;
     private boolean status;
     
-    public ContaBanco(int n, String t, String d) {
-        this.numConta = n;
-        this.tipo = t;
-        this.dono = d;
+    public void estadoAtual() {
+        System.out.println("-----------------------------------------------");
+        System.out.println("Conta: " + this.getNumConta());
+        System.out.println("Tipo: " + this.getTipo());
+        System.out.println("Dono: " + this.getDono());
+        System.out.println("Saldo: " + this.getSaldo());
+        System.out.println("Status: " + this.getStatus());
+    }
+    
+    public ContaBanco() {
         this.saldo = 0;
         this.status = false;
     }
     
     
-    public void abrirConta(String t, boolean s) {
-        setTipo(t);
-        setStatus(s);
-        if (t == "CC") {
-                setSaldo(150);
-            } else if (t == "CP") {
+    public void abrirConta(String t) {
+        this.setTipo(t);
+        this.setStatus(true);
+        if ("CC".equals(t)) {
                 setSaldo(50);
+            } else if ("CP".equals(t)) {
+                setSaldo(150);
             }
+        
+        System.out.println("Conta aberta com sucesso.");
     }
     
     public void fecharConta() {
-        if (saldo > 0) {
+        if (this.getSaldo() > 0) {
             System.out.println("Saque o valor antes de fechar a conta.");
-        } else if (saldo < 0) {
+        } else if (this.getSaldo() < 0) {
             System.out.println("Saldo devedor, não é possível fechar a conta.");
         } else {
-            setStatus(false);
+            this.setStatus(false);
+            System.out.println("Conta fechada com sucesso.");
         }
-        
-        this.status = false;
     }
     
     public void depositar(float valor) {
-        if (getStatus() == true) {
-            setSaldo(getSaldo() + valor);
+        if (getStatus()) {
+            this.setSaldo(this.getSaldo() + valor);
+            System.out.println("Déposito realizado na conta de " + this.getDono());
         } else {
-            System.out.println("Impossível depositar.");
+            System.out.println("Impossível depositar em uma conta fechada.");
         }
     }
     
     public void sacar(float valor) {
-        if (getStatus() == true) {
-            if (getSaldo() > 0) {
-                setSaldo(getSaldo() - valor);
-            }
-        } else {
-            System.out.println("Saldo insuficiente.");
+        if (getStatus()) {
+            if (this.getSaldo() >= valor) {
+                this.setSaldo(this.getSaldo() - valor);
+                System.out.println("Saque realizado na conta de ." + this.getDono());
+            } else {
+                System.out.println("Saldo insuficiente.");
+            } 
+        } else{
+            System.out.println("Impossíel sacar de uma conta inativa.");
         }
     }
     
-    public void pagarMensal() {
-        float m;
+    public void pagarMensalidade() {
+        int v = 0;
         
-        if (getTipo() == "CC"){
-            m =12;
-        } if (getTipo() == "CP") {
-            m = 20;
+        if ("CC".equals(this.getTipo())){
+            v = 12;
+        } else if ("CP".equals(this.getTipo())) {
+            v = 20;
         }
         
-        if (getStatus() == true) {
-            if (getSaldo() > m) {
-                setSaldo(getSaldo() - m);
-            }
+        if (this.getStatus()) {
+            this.setSaldo(this.getSaldo() - v);
+            System.out.println("Mensalidade paga com sucesso por " + this.getDono());            
         } else {
-            System.out.println("Saldo insuficiente");
+            System.out.println("Impossível pagar uma conta fechada.");
         }
     }
     
